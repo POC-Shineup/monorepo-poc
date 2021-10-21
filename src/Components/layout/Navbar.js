@@ -10,10 +10,10 @@ function Navbar() {
             <div className="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" to="/">Register</Link>
+                        <Link className="nav-link" to="/signup">Register</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/">SignIn</Link>
+                        <Link className="nav-link" to="/signin">SignIn</Link>
                     </li>
                     {/* <li className="nav-item">
                         <Link className="nav-link" to="/">Link</Link>
