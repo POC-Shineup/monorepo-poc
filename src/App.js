@@ -1,11 +1,10 @@
 import { BrowserRouter } from "react-router-dom";
+import Navbar from "./Components/layout/Navbar";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <h1>ShineUp poc</h1>
-      </div>
+      <Navbar />
     </BrowserRouter>
   );
 }
