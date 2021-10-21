@@ -4,7 +4,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <h1>ShineUp</h1>
+        <h1>ShineUp poc</h1>
       </div>
     </BrowserRouter>
   );
