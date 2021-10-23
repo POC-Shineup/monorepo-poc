@@ -1,0 +1,11 @@
+.formRow input{
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    line-height: 1;
+    padding:10px 5px;
+    margin: 10px auto;
+    text-align: left;
+    border:1px solid #797878;
+    outline: none;
+}

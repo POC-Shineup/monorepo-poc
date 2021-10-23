@@ -1,0 +1,16 @@
+.btns{
+    font-size:1rem;
+    line-height: 1;
+    font-weight: 300;
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    color:white;
+    background:rgb(231, 89, 46);
+    border:0px;
+    outline:none;
+    padding: 1rem 0;
+    cursor: pointer;
+}
