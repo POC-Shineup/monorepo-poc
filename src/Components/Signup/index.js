@@ -3,109 +3,61 @@ import Button from "../forms/Buttons";
 import FormInput from "../forms/Buttons/FormInput";
 import './styles.css';
 
+import {withRouter} from "react-router-dom"
 import {auth, handleUserProfile} from "./../../firebase/utils"
 
 
 
-const initialState = {
-    displayName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    errors:[]
-}
 
-class Signup extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...initialState
-        }
-        this.handleChange = this.handleChange.bind(this);
+   
+
+const Signup = (props) => {
+
+
+     const [displayName, setDisplayName] = useState("");
+     const [email, setEmail] = useState("");
+     const [password, setPassword] = useState("");
+     const [confirmPassword, setConfirmPassword] = useState("");
+     const [errors, setErrors] = useState([]);
+
+    const reset = () => {
+        setDisplayName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setErrors([])
     }
 
-    handleChange(e){
-        console.log(e.target)
-        const {name,value} = e.target;
-        this.setState({
-            [name]: value
-        })
-    }
-
-    handleFormSubmit = async (e) => {
-        e.preventDefault();
-          const {displayName, email, password, confirmPassword} = this.state;
-             if(password !== confirmPassword){
+    const handleFormSubmit = async (e) => {
+        console.log("password", password, confirmPassword)
+            e.preventDefault();
+            
+            if(password !== confirmPassword){
                 const error = [`Passwords don't match`];
-                this.setState({
-                    errors: error
-                })
+                
+                setErrors(error);
                 return;
             }
+
             try{
                 const {user} = await auth.createUserWithEmailAndPassword(email,password);
 
                 await handleUserProfile(user,{displayName})
 
-                this.setState({
-                    ...initialState
-                });
-
+                reset();
+                props.history.push('/home')
             }catch(err){
-            alert(err.message);            }
-            }       
-
-// const Signup = () => {
-
-// // Need rework on func component
-//     const [userDetail, setUserDetail] = useState({ displayName: "", email: "", password: "", confirmPassword: "", errors:[] });
-
-//     const {displayName, email, password, confirmPassword,errors} = userDetail;
-
-
-//     const handleChange = (e) => {
-//          const {name, value} = e.target;
-        
-//          setUserDetail({...e,
-//              [name]: value
-//          })
-//          console.log("user",userDetail)
-
-//     }
-
-//     const handleFormSubmit = async (e) => {
-//         console.log("password", password, confirmPassword)
-//             e.preventDefault();
-            
-//             if(password !== confirmPassword){
-//                 const error = [`Passwords don't match`];
-//                 setUserDetail({
-//                     errors: error
-//                 })
                 
-//             }
-
-//             try{
-//                 const {user} = await auth.createUserWithEmailAndPassword(email,password);
-
-//                 await handleUserProfile(user,{displayName})
-
-//                 setUserDetail({
-//                     ...userDetail
-//                 });
-//                 console.log("userdetail",userDetail)
-//             }catch(err){
-                
-//             }
+            }
             
-//     }
+    }
 
 
 
-   render(){
+  // render(){
 
-        const {displayName, email, password, confirmPassword, errors} = this.state;
+       // const {displayName, email, password, confirmPassword, errors} = this.state;
    
     return(
         
@@ -125,13 +77,14 @@ class Signup extends Component {
                 )}
 
 
-                <form onSubmit={this.handleFormSubmit}>
+                <form onSubmit={handleFormSubmit}>
                     <FormInput 
                         type="text"
                         name= "displayName"
                         value={displayName}
                         placeholder="Name"
-                        onChange={this.handleChange}
+                        //onChange={this.handleChange}
+                        handleChange={e => setDisplayName(e.target.value)}
                     />
 
                     <FormInput 
@@ -139,7 +92,8 @@ class Signup extends Component {
                         name= "email"
                         value={email}
                         placeholder="Email"
-                        onChange={this.handleChange}
+                        //onChange={this.handleChange}
+                        handleChange={e => setEmail(e.target.value)}
                     />
 
                     <FormInput 
@@ -147,7 +101,8 @@ class Signup extends Component {
                         name= "password"
                         value={password}
                         placeholder="Password"
-                        onChange={this.handleChange}
+                        //onChange={this.handleChange}
+                        handleChange={e => setPassword(e.target.value)}
                     />
 
                     <FormInput 
@@ -155,7 +110,8 @@ class Signup extends Component {
                         name= "confirmPassword"
                         value={confirmPassword}
                         placeholder="Confirm password"
-                        onChange={this.handleChange}
+                        //onChange={this.handleChange}
+                        handleChange={e => setConfirmPassword(e.target.value)}
                     />
 
                     <Button type="submit" >
@@ -166,7 +122,7 @@ class Signup extends Component {
             </div>
         </div>
     )
-     }
+   //  }
 }
 
-export default Signup;
+export default withRouter(Signup);

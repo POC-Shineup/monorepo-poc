@@ -8,16 +8,19 @@ import Homepage from "./Pages/Homepage"
 import Register from "./Pages/Register";
 import Signin from "./Pages/Signin";
 import "./index.css"
-import userEvent from '@testing-library/user-event';
+import Dashboard from "./Pages/Dashboard"
 
+import {connect} from "react-redux"
+import {setCurrentUser} from './Components/redux/User/user.actions';
+import WithAuth from "./hoc/withAuth";
 
-function App() {
+const App = props => {
 
-  const [currentUser, setCurrentUser] = useState(null);
+ // const [currentUser, setCurrentUser] = useState(null);
 
-  const authListner = () => {
-    return null
-  };
+  // const authListner = () => {
+  //   return null
+  // };
 
   // for basic sigining in
   // useEffect(() => {
@@ -32,27 +35,30 @@ function App() {
 
 
   useEffect(() => {
-    authListner(auth.onAuthStateChanged(async (userAuth) =>{
+
+    const {setCurrentUser} = props
+   const authListner = auth.onAuthStateChanged(async (userAuth) =>{
       if(userAuth){
         const userRef = await handleUserProfile(userAuth);
         userRef.onSnapshot((snapshot) => {
           setCurrentUser({
-            currentUser:{
               id:snapshot.id,
               ...snapshot.data()
-            }
           })
         })
       }
       else{
-        setCurrentUser(null);
+        setCurrentUser(userAuth);
       }
-    }))
+    })
+    return () => {
+      authListner();
+    }
   },[])
 
 
 
-  console.log("currentUser", currentUser)
+  console.log("currentUser", props.currentUser);
 
   return (
     <div className="App">
@@ -65,15 +71,22 @@ function App() {
       /> */}
       <div className="main">
           <Route  path="/home" exact render={() => (
-              <Homepage currentUser={currentUser} />
+              <Homepage />
           )} />
           
-          <Route  path="/register" exact render={() => currentUser ? <Redirect to="/home" /> : (
-              <Register currentUser={currentUser} />
+          <Route  path="/register" exact render={() =>  (
+              <Register  />
           )} />
 
-          <Route path="/signin" exact render={() => currentUser ? <Redirect to="/home" /> : (
-              <Signin currentUser={currentUser} />
+          <Route path="/signin" exact render={() =>  (
+              <Signin  />
+          )} />
+
+          
+          <Route path="/dashboard" exact render={() => (
+            <WithAuth>
+              <Dashboard currentUser={props.currentUser} />
+            </WithAuth>
           )} />
 
       </div>
@@ -86,4 +99,13 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = ({user}) =>({
+  currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);

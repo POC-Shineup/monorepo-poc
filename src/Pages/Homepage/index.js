@@ -7,7 +7,7 @@ const Homepage = props => {
   return (
     <div className="homepage">
               <Navbar {...props}/>
-        <h1 className="head">HomePage</h1>
+        <h1 className="head">Home</h1>
     </div>
   );
 };

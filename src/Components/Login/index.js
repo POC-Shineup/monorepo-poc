@@ -3,7 +3,7 @@ import "./styles.css";
 import Button from "../../Components/forms/Buttons"
 
 import {auth,SignInWithGoogle} from "../../firebase/utils"
-
+import {withRouter} from "react-router-dom"
 import FormInput from "./../forms/Buttons/FormInput"
 
 const initialState = {
@@ -12,42 +12,50 @@ const initialState = {
 }
 
 
-class Login extends Component {
+//class Login extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            ...initialState
-        };
+    // constructor(props){
+    //     super(props);
+    //     this.state = {
+    //         ...initialState
+    //     };
 
-        this.handleChange = this.handleChange.bind(this);
-    }
+    //     this.handleChange = this.handleChange.bind(this);
+    // }
 
-    handleChange(e){
-        const {name, value} = e.target;
+    // handleChange(e){
+    //     const {name, value} = e.target;
 
-        this.setState({
-            [name]: value
-        })
-    }
+    //     this.setState({
+    //         [name]: value
+    //     })
+    // }
 
 
 
-// const Login = props => {
+const Login = props => {
  // Rework - FComponent
-//     const [userLogin, setUserLogin] = useState({email: "", password: ""})
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
+    const resetForm = () => {
+               setEmail("");
+            setPassword("")
+    }
 
-    handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
         e.preventDefault();
-        const {email, password} = this.state;  
+       // const {email, password} = this.state;  
 
         try{
 
             await auth.signInWithEmailAndPassword(email,password);
-            this.setState({
-                ...initialState
-            })
+            // this.setState({
+            //     ...initialState
+            // })
+
+        resetForm();
+                props.history.push('/home')
 
         }catch(err){
             alert(err.message);
@@ -56,22 +64,24 @@ class Login extends Component {
     }
 
 
-    render(){
+//render(){
 
-     const {email, password} = this.state;   
+     // const {email, password} = this.state;   
     return(
         <div className="login">
             <div className="wrapper">
                 <h2> Login</h2>
                 <div className="formWrap">
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={handleSubmit}> 
+                    {/* {this.handleSubmit} */}
 
                        <FormInput
                         type="email"
                         name="email"
                         value={email}
                         placeholder="Email"
-                        onChange={this.handleChange}
+                        //onChange={this.handleChange}
+                        handleChange={e => setEmail(e.target.value)}
                        />
 
 
@@ -80,7 +90,8 @@ class Login extends Component {
                         name="password"
                         value={password}
                         placeholder="Password"
-                        onChange={this.handleChange}
+                        //onChange={this.handleChange}
+                        handleChange={e => setPassword(e.target.value)}
                        />
 
                        <Button type="submit">
@@ -100,7 +111,7 @@ class Login extends Component {
             </div>
         </div>
     )
-    }
+    //}
 }
 
-export default Login;
+export default withRouter (Login);
